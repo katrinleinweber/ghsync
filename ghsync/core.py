@@ -56,6 +56,7 @@ def run():
 
     # cli flags
     upstream_on = args.flags.contains('--upstream')
+    shallow_on = args.flags.contains('--shallow')
     only_type = args.grouped.get('--only', False)
     organization = args[0]
 
@@ -128,9 +129,14 @@ def run():
 
                 else:
                     if is_private:
-                        puts(colored.red('Cloning private repo: {repo.name}'.format(repo=repo)))
-                        os.system('git clone git@github.com:{repo.owner}/{repo.name}.git'.format(repo=repo))
-                        print ('git clone git@github.com:%s/%s.git' % (repo.owner, repo.name))
+                        if shallow_on:
+                            puts(colored.red('Cloning private repo: {repo.name}'.format(repo=repo)))
+                            os.system('git clone --depth=2  git@github.com:{repo.owner}/{repo.name}.git'.format(repo=repo))
+                            print ('git clone --depth=2 git@github.com:%s/%s.git' % (repo.owner, repo.name))
+                        else:
+                            puts(colored.red('Cloning private repo: {repo.name}'.format(repo=repo)))
+                            os.system('git clone git@github.com:{repo.owner}/{repo.name}.git'.format(repo=repo))
+                            print ('git clone git@github.com:%s/%s.git' % (repo.owner, repo.name))
 
                         if is_fork and upstream_on:
                             os.chdir(repo.name)
@@ -140,9 +146,14 @@ def run():
 
 
                     else:
-                        puts(colored.red('Cloning repo: {repo.name}'.format(repo=repo)))
-                        os.system('git clone git://github.com/%s/%s.git' % (repo.owner, repo.name))
-                        print ('git clone git://github.com/%s/%s.git' % (repo.owner, repo.name))
+                        if shallow_on:
+                            puts(colored.red('Cloning repo: {repo.name}'.format(repo=repo)))
+                            os.system('git clone --depth=2 git://github.com/%s/%s.git' % (repo.owner, repo.name))
+                            print ('git clone --depth=2 git://github.com/%s/%s.git' % (repo.owner, repo.name))
+                        else:
+                            puts(colored.red('Cloning repo: {repo.name}'.format(repo=repo)))
+                            os.system('git clone git://github.com/%s/%s.git' % (repo.owner, repo.name))
+                            print ('git clone git://github.com/%s/%s.git' % (repo.owner, repo.name))
 
             # return to base
             os.chdir('..')

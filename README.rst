@@ -40,6 +40,10 @@ Options
 If the ``--upstream`` argument is passed, all forked repos will have an
 **upstream** remote added, pointing to their parent repo on GitHub.
 
+If the ``--shallow`` argument is passed, all clones will be of ``depth=2``.
+This is intended to preserve local disk space. Use ``git fetch --unshallow``
+on `repos whose full history`_ you want.
+
 You can also selectively sync certian types of repos with ``--only``. If
 you'd like to only sync forked repositories, for example::
 
@@ -55,3 +59,4 @@ request.
 
 
 .. _`the repository`: http://github.com/kennethreitz/ghsync
+.. _`repos whose full history`: https://git-scm.com/docs/git-fetch#_options
